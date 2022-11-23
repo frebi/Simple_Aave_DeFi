@@ -13,6 +13,7 @@ async function main(){
     const lendingPool = await getLendingPool(deployer)
     console.log(`LendingPool address ${lendingPool.address}`)
 
+
     // 1. Depositing
     const wethTokenAddress = networkConfig[network.config.chainId].wethToken
     /*--- before depositing we need to approve aave lending pool to use the amount of Weth that we want to deposit ---*/
@@ -20,6 +21,7 @@ async function main(){
     console.log("Depositing...")
     await lendingPool.deposit(wethTokenAddress, AMOUNT, deployer, 0)
     console.log("Deposited!")
+
 
     // 2. Borrowing
     let {availableBorrowsETH, totalDebtETH} = await getBorrowUserData(lendingPool, deployer)
@@ -32,6 +34,7 @@ async function main(){
     await borrowDai(daiTokenAddress, lendingPool, amountDaiToBorrowWei, deployer)
     await getBorrowUserData(lendingPool, deployer)
 
+
     // 3. Repaying
     await repay(amountDaiToBorrowWei, daiTokenAddress, lendingPool, deployer)
     await getBorrowUserData(lendingPool, deployer)
@@ -39,6 +42,7 @@ async function main(){
 
 
 async function getLendingPool(account){
+    //https://docs.aave.com/developers/v/2.0/the-core-protocol/addresses-provider
     const lendingPoolAddressesProvider = await ethers.getContractAt(
         "ILendingPoolAddressesProvider", 
         networkConfig[network.config.chainId].lendingPoolAddressesProvider, 
